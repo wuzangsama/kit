@@ -1,19 +1,14 @@
 package generator
 
 import (
-	"fmt"
-	"path"
-	"strings"
-
 	"bytes"
-
-	"os/exec"
-
-	"os"
-
-	"runtime"
-
 	"errors"
+	"fmt"
+	"os"
+	"os/exec"
+	"path"
+	"runtime"
+	"strings"
 
 	"github.com/dave/jennifer/jen"
 	"github.com/emicklei/proto"
@@ -70,13 +65,13 @@ func (g *GenerateTransport) Generate() (err error) {
 		if v == g.transport {
 			break
 		} else if n == len(SupportedTransports)-1 {
-			return errors.New(fmt.Sprintf("transport `%s` not supported", g.transport))
+			return fmt.Errorf("transport `%s` not supported", g.transport)
 		}
 	}
 	if b, err := g.fs.Exists(g.filePath); err != nil {
 		return err
 	} else if !b {
-		return errors.New(fmt.Sprintf("service %s was not found", g.name))
+		return fmt.Errorf("service %s was not found", g.name)
 	}
 	svcSrc, err := g.fs.ReadFile(g.filePath)
 	if err != nil {
@@ -84,7 +79,7 @@ func (g *GenerateTransport) Generate() (err error) {
 	}
 	g.file, err = parser.NewFileParser().Parse([]byte(svcSrc))
 	if !g.serviceFound() {
-		return errors.New(fmt.Sprintf("could not find the service interface in `%s`", g.name))
+		return fmt.Errorf("could not find the service interface in `%s`", g.name)
 	}
 	g.removeBadMethods()
 	mth := g.serviceInterface.Methods
@@ -131,6 +126,7 @@ func (g *GenerateTransport) Generate() (err error) {
 	}
 	return
 }
+
 func (g *GenerateTransport) serviceFound() bool {
 	for n, v := range g.file.Interfaces {
 		if v.Name == g.interfaceName {
@@ -142,6 +138,7 @@ func (g *GenerateTransport) serviceFound() bool {
 	}
 	return false
 }
+
 func (g *GenerateTransport) removeBadMethods() {
 	keepMethods := []parser.Method{}
 	for _, v := range g.serviceInterface.Methods {
@@ -166,6 +163,7 @@ func (g *GenerateTransport) removeBadMethods() {
 	}
 	g.serviceInterface.Methods = keepMethods
 }
+
 func (g *GenerateTransport) removeUnwantedMethods() {
 	keepMethods := []parser.Method{}
 	for _, v := range g.serviceInterface.Methods {
@@ -213,6 +211,7 @@ func newGenerateHTTPTransport(name string, gorillaMux bool, serviceInterface par
 	t.fs = fs.Get()
 	return t
 }
+
 func (g *generateHTTPTransport) Generate() (err error) {
 	err = g.CreateFolderStructure(g.destPath)
 	if err != nil {
@@ -554,6 +553,7 @@ func newGenerateHTTPTransportBase(name string, gorillaMux bool, serviceInterface
 	t.fs = fs.Get()
 	return t
 }
+
 func (g *generateHTTPTransportBase) Generate() (err error) {
 	err = g.CreateFolderStructure(g.destPath)
 	if err != nil {
@@ -669,6 +669,7 @@ func newGenerateGRPCTransportProto(name, pbPath string, serviceInterface parser.
 	t.fs = fs.Get()
 	return t
 }
+
 func (g *generateGRPCTransportProto) Generate() (err error) {
 	g.CreateFolderStructure(g.destPath)
 	if b, err := g.fs.Exists(g.pbFilePath); err != nil {
@@ -803,6 +804,7 @@ protoc %s.proto --go_out=plugins=grpc:.`, g.name),
 		false,
 	)
 }
+
 func (g *generateGRPCTransportProto) getService() *proto.Service {
 	for i, e := range g.protoSrc.Elements {
 		if r, ok := e.(*proto.Service); ok {
@@ -813,6 +815,7 @@ func (g *generateGRPCTransportProto) getService() *proto.Service {
 	}
 	return nil
 }
+
 func (g *generateGRPCTransportProto) generateRequestResponse() {
 	for _, v := range g.serviceInterface.Methods {
 		foundRequest := false
@@ -839,6 +842,7 @@ func (g *generateGRPCTransportProto) generateRequestResponse() {
 		}
 	}
 }
+
 func (g *generateGRPCTransportProto) getServiceRPC(svc *proto.Service) {
 	for _, v := range g.serviceInterface.Methods {
 		found := false
@@ -893,6 +897,7 @@ func newGenerateGRPCTransportBase(name, pbImportPath string, serviceInterface pa
 	t.fs = fs.Get()
 	return t
 }
+
 func (g *generateGRPCTransportBase) Generate() (err error) {
 	err = g.CreateFolderStructure(g.destPath)
 	if err != nil {
@@ -997,6 +1002,7 @@ func newGenerateGRPCTransport(name, pbImportPath string, serviceInterface parser
 	t.fs = fs.Get()
 	return t
 }
+
 func (g *generateGRPCTransport) Generate() (err error) {
 	err = g.CreateFolderStructure(g.destPath)
 	if err != nil {

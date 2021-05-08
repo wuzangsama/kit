@@ -19,6 +19,7 @@ func TestFileParser_Parse(t *testing.T) {
 		So(err, ShouldBeNil)
 	})
 }
+
 func TestFileParser_ParseServiceInterface(t *testing.T) {
 	fp := NewFileParser()
 	f, err := fp.Parse([]byte(
@@ -58,6 +59,7 @@ type MyService interface{
 		})
 	})
 }
+
 func TestFileParser_ParseStructFunction(t *testing.T) {
 	fp := NewFileParser()
 	f, err := fp.Parse([]byte(`package main
@@ -74,6 +76,7 @@ func TestFileParser_ParseStructFunction(t *testing.T) {
 		})
 	})
 }
+
 func TestFileParser_ParseVariablesConstants(t *testing.T) {
 	fp := NewFileParser()
 	f, err := fp.Parse([]byte(

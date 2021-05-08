@@ -2,7 +2,6 @@ package generator
 
 import (
 	"path"
-
 	"runtime"
 
 	"github.com/kujtimiihoxha/kit/parser"
@@ -43,8 +42,8 @@ func setDefaults() {
 	}
 	viper.SetDefault("gk_service_struct_prefix", "basic")
 	viper.Set("gk_testing", true)
-
 }
+
 func createTestMethod(name string, param []parser.NamedTypeValue, result []parser.NamedTypeValue) parser.Method {
 	param = append(param, parser.NewNameType("ctx", "context.Context"))
 	return parser.Method{
@@ -53,6 +52,7 @@ func createTestMethod(name string, param []parser.NamedTypeValue, result []parse
 		Results:    result,
 	}
 }
+
 func getTestServiceInterface(name string) parser.Interface {
 	n := utils.ToCamelCase(name + "_Service")
 	return parser.NewInterface(n, []parser.Method{

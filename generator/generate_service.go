@@ -131,6 +131,7 @@ func (g *GenerateService) Generate() (err error) {
 	mG := newGenerateCmd(g.name, g.pbImportPath, g.serviceInterface, g.sMiddleware, g.eMiddleware, g.methods)
 	return mG.Generate()
 }
+
 func (g *GenerateService) generateServiceMethods() {
 	var stp string
 	methodParameterNames := []parser.NamedTypeValue{}
@@ -177,6 +178,7 @@ func (g *GenerateService) generateServiceMethods() {
 		g.pg.NewLine()
 	}
 }
+
 func (g *GenerateService) generateServiceStruct() {
 	for _, v := range g.file.Structures {
 		if v.Name == g.serviceStructName {
@@ -186,6 +188,7 @@ func (g *GenerateService) generateServiceStruct() {
 	}
 	g.pg.appendStruct(g.serviceStructName)
 }
+
 func (g *GenerateService) generateNewMethod() {
 	for _, v := range g.file.Methods {
 		if v.Name == "New" {
@@ -218,6 +221,7 @@ func (g *GenerateService) generateNewMethod() {
 		body...)
 	g.pg.NewLine()
 }
+
 func (g *GenerateService) generateNewBasicStructMethod() {
 	fn := fmt.Sprintf("New%s", utils.ToCamelCase(g.serviceStructName))
 	for _, v := range g.file.Methods {
@@ -237,6 +241,7 @@ func (g *GenerateService) generateNewBasicStructMethod() {
 	g.pg.appendFunction(fn, nil, []jen.Code{}, []jen.Code{}, g.interfaceName, body...)
 	g.pg.NewLine()
 }
+
 func (g *GenerateService) serviceFound() bool {
 	for n, v := range g.file.Interfaces {
 		if v.Name == g.interfaceName {
@@ -249,6 +254,7 @@ func (g *GenerateService) serviceFound() bool {
 	}
 	return false
 }
+
 func (g *GenerateService) removeBadMethods() {
 	keepMethods := []parser.Method{}
 	for _, v := range g.serviceInterface.Methods {
@@ -303,6 +309,7 @@ func newGenerateServiceMiddleware(name string, serviceFile *parser.File,
 	gsm.fs = fs.Get()
 	return gsm
 }
+
 func (g *generateServiceMiddleware) Generate() error {
 	g.CreateFolderStructure(g.destPath)
 	if b, err := g.fs.Exists(g.filePath); err != nil {
@@ -517,6 +524,7 @@ func newGenerateServiceEndpoints(name string, imports []parser.NamedTypeValue,
 	gsm.fs = fs.Get()
 	return gsm
 }
+
 func (g *generateServiceEndpoints) Generate() error {
 	g.CreateFolderStructure(g.destPath)
 	if b, err := g.fs.Exists(g.filePath); err != nil {
@@ -911,6 +919,7 @@ func newGenerateServiceEndpointsBase(name string, serviceInterface parser.Interf
 	gsm.fs = fs.Get()
 	return gsm
 }
+
 func (g *generateServiceEndpointsBase) Generate() (err error) {
 	err = g.CreateFolderStructure(g.destPath)
 	if err != nil {
@@ -995,6 +1004,7 @@ func newGenerateEndpointMiddleware(name string) Gen {
 	gsm.fs = fs.Get()
 	return gsm
 }
+
 func (g *generateEndpointMiddleware) Generate() (err error) {
 	err = g.CreateFolderStructure(g.destPath)
 	if err != nil {
@@ -1206,6 +1216,7 @@ func newGenerateCmdBase(name string, serviceInterface parser.Interface,
 	t.fs = fs.Get()
 	return t
 }
+
 func (g *generateCmdBase) Generate() (err error) {
 	err = g.CreateFolderStructure(g.destPath)
 	if err != nil {
@@ -1658,6 +1669,7 @@ func (g *generateCmd) Generate() (err error) {
 	}
 	return g.fs.WriteFile(g.filePath, s, true)
 }
+
 func (g *generateCmd) generateRun() (*PartialGenerator, error) {
 	pg := NewPartialGenerator(nil)
 	pg.Raw().Id("fs").Dot("Parse").Call(jen.Qual("os", "Args").Index(jen.Lit(1), jen.Empty()))
@@ -1792,6 +1804,7 @@ func (g *generateCmd) generateRun() (*PartialGenerator, error) {
 	).Line()
 	return pg, nil
 }
+
 func (g *generateCmd) generateVars() {
 	if g.generateFirstTime {
 		g.code.Raw().Var().Id("tracer").Qual("github.com/opentracing/opentracing-go", "Tracer").Line()
@@ -1869,6 +1882,7 @@ func (g *generateCmd) generateVars() {
 		g.code.NewLine()
 	}
 }
+
 func (g *generateCmd) generateInitHTTP() (err error) {
 	for _, v := range g.file.Methods {
 		if v.Name == "initHttpHandler" {
@@ -1944,6 +1958,7 @@ func (g *generateCmd) generateInitHTTP() (err error) {
 	)
 	return
 }
+
 func (g *generateCmd) generateInitGRPC() (err error) {
 	for _, v := range g.file.Methods {
 		if v.Name == "initGRPCHandler" {
@@ -2027,6 +2042,7 @@ func (g *generateCmd) generateInitGRPC() (err error) {
 	)
 	return
 }
+
 func (g *generateCmd) generateGetMiddleware() (err error) {
 	for _, v := range g.file.Methods {
 		if v.Name == "getServiceMiddleware" {
@@ -2111,6 +2127,7 @@ func (g *generateCmd) generateGetMiddleware() (err error) {
 	)
 	return
 }
+
 func (g *generateCmd) generateDefaultMetrics() {
 	if g.generateFirstTime {
 		g.code.NewLine()
@@ -2164,6 +2181,7 @@ func (g *generateCmd) generateDefaultMetrics() {
 		)
 	}
 }
+
 func (g *generateCmd) generateCancelInterrupt() {
 	if g.generateFirstTime {
 		g.code.NewLine()
@@ -2209,6 +2227,7 @@ func (g *generateCmd) generateCancelInterrupt() {
 		)
 	}
 }
+
 func (g *generateCmd) generateCmdMain() error {
 	mainDest := fmt.Sprintf(viper.GetString("gk_cmd_path_format"), utils.ToLowerSnakeCase(g.name))
 	mainFilePath := path.Join(mainDest, "main.go")

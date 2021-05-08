@@ -3,15 +3,13 @@ package generator
 import (
 	"fmt"
 	"path"
-
-	yaml "gopkg.in/yaml.v2"
-
 	"strings"
 
 	"github.com/kujtimiihoxha/kit/fs"
 	"github.com/kujtimiihoxha/kit/utils"
 	"github.com/spf13/afero"
 	"github.com/spf13/viper"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // GenerateDocker implements Gen and is used to generate
@@ -94,6 +92,7 @@ func (g *GenerateDocker) Generate() (err error) {
 	}
 	return g.fs.WriteFile("docker-compose.yml", string(d), true)
 }
+
 func (g *GenerateDocker) generateDockerFile(name, svcFilePath, httpFilePath, grpcFilePath string) (err error) {
 	pth, err := utils.GetDockerFileProjectPath()
 	if err != nil {

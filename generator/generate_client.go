@@ -3,7 +3,6 @@ package generator
 import (
 	"fmt"
 	"path"
-
 	"strings"
 
 	"github.com/dave/jennifer/jen"
@@ -96,6 +95,7 @@ func (g *GenerateClient) Generate() (err error) {
 
 	return
 }
+
 func (g *GenerateClient) serviceFound() bool {
 	for n, v := range g.serviceFile.Interfaces {
 		if v.Name == g.interfaceName {
@@ -108,6 +108,7 @@ func (g *GenerateClient) serviceFound() bool {
 	}
 	return false
 }
+
 func (g *GenerateClient) removeBadMethods() {
 	keepMethods := []parser.Method{}
 	for _, v := range g.serviceInterface.Methods {
@@ -156,6 +157,7 @@ func newGenerateHTTPClient(name string, serviceInterface parser.Interface, servi
 	i.fs = fs.Get()
 	return i
 }
+
 func (g *generateHTTPClient) Generate() (err error) {
 	g.CreateFolderStructure(g.destPath)
 	endpointImport, err := utils.GetEndpointImportPath(g.name)
@@ -265,6 +267,7 @@ func (g *generateHTTPClient) Generate() (err error) {
 	g.code.NewLine()
 	return g.fs.WriteFile(g.filePath, g.srcFile.GoString(), false)
 }
+
 func (g *generateHTTPClient) generateDecodeEncodeMethods(endpointImport string) (err error) {
 	httpImport, err := utils.GetHTTPTransportImportPath(g.name)
 	if err != nil {
@@ -362,6 +365,7 @@ func newGenerateGRPCClient(name, pbImportPath string, serviceInterface parser.In
 	i.fs = fs.Get()
 	return i
 }
+
 func (g *generateGRPCClient) Generate() (err error) {
 	g.CreateFolderStructure(g.destPath)
 	endpointImport, err := utils.GetEndpointImportPath(g.name)
@@ -441,6 +445,7 @@ func (g *generateGRPCClient) Generate() (err error) {
 	}
 	return g.fs.WriteFile(g.filePath, g.srcFile.GoString(), false)
 }
+
 func (g *generateGRPCClient) generateDecodeEncodeMethods(endpointImport string) (err error) {
 	for _, m := range g.serviceInterface.Methods {
 		g.code.NewLine()

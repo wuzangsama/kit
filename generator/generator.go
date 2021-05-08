@@ -1,16 +1,14 @@
 package generator
 
 import (
+	"bytes"
 	"fmt"
 	"go/ast"
+	"go/format"
 	ps "go/parser"
 	"go/token"
-	"strings"
-
 	"strconv"
-
-	"bytes"
-	"go/format"
+	"strings"
 
 	"github.com/dave/jennifer/jen"
 	"github.com/kujtimiihoxha/kit/fs"
@@ -35,6 +33,7 @@ type BaseGenerator struct {
 func (b *BaseGenerator) InitPg() {
 	b.code = NewPartialGenerator(b.srcFile.Empty())
 }
+
 func (b *BaseGenerator) getMissingImports(imp []parser.NamedTypeValue, f *parser.File) ([]parser.NamedTypeValue, error) {
 	n := []parser.NamedTypeValue{}
 	for _, v := range imp {
@@ -87,7 +86,7 @@ func (b *BaseGenerator) GenerateNameBySample(sample string, exclude []parser.Nam
 		if v.Name == name {
 			sn++
 			if sn > len(sample) {
-				sample = string(len(sample) - sn)
+				sample = string(rune(len(sample) - sn))
 			}
 			name = utils.ToLowerFirstCamelCase(sample)[:sn]
 		}
@@ -196,6 +195,7 @@ func NewPartialGenerator(st *jen.Statement) *PartialGenerator {
 		raw: &jen.Statement{},
 	}
 }
+
 func (p *PartialGenerator) appendMultilineComment(c []string) {
 	for i, v := range c {
 		if i != len(c)-1 {
@@ -215,6 +215,7 @@ func (p *PartialGenerator) Raw() *jen.Statement {
 func (p *PartialGenerator) String() string {
 	return p.raw.GoString()
 }
+
 func (p *PartialGenerator) appendInterface(name string, methods []jen.Code) {
 	p.raw.Type().Id(name).Interface(methods...).Line()
 }

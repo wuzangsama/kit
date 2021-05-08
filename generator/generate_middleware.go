@@ -3,7 +3,6 @@ package generator
 import (
 	"fmt"
 	"path"
-
 	"strings"
 
 	"github.com/dave/jennifer/jen"
@@ -159,6 +158,7 @@ func (g *GenerateMiddleware) generateServiceMiddleware() (err error) {
 	}
 	return g.fs.WriteFile(g.serviceGenerator.filePath, s, true)
 }
+
 func (g *GenerateMiddleware) generateEndpointMiddleware() (err error) {
 	g.srcFile = jen.NewFilePath("endpoint")
 	g.InitPg()
@@ -248,6 +248,7 @@ func (g *GenerateMiddleware) generateEndpointMiddleware() (err error) {
 	}
 	return g.fs.WriteFile(g.filePath, s, true)
 }
+
 func (g *GenerateMiddleware) serviceFound() bool {
 	for n, v := range g.file.Interfaces {
 		if v.Name == g.interfaceName {
@@ -260,6 +261,7 @@ func (g *GenerateMiddleware) serviceFound() bool {
 	}
 	return false
 }
+
 func (g *GenerateMiddleware) removeBadMethods() {
 	keepMethods := []parser.Method{}
 	for _, v := range g.serviceInterface.Methods {

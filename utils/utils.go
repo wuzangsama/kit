@@ -1,12 +1,11 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
-
-	"fmt"
 
 	"github.com/alioygur/godash"
 	"github.com/kujtimiihoxha/kit/fs"
@@ -210,6 +209,7 @@ func getModNameFromModFile(name string) (string, error) {
 	return "", nil
 }
 
+// IsExist 路径是否存在
 func IsExist(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)

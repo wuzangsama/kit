@@ -73,6 +73,7 @@ func (fp *FileParser) Parse(src []byte) (*File, error) {
 	//fmt.Println(f.String())
 	return &f, nil
 }
+
 func (fp *FileParser) parseType(ds []ast.Spec, f *File) {
 	for _, sp := range ds {
 		tsp, ok := sp.(*ast.TypeSpec)
@@ -103,6 +104,7 @@ func (fp *FileParser) parseType(ds []ast.Spec, f *File) {
 		}
 	}
 }
+
 func (fp *FileParser) parseImports(ds []ast.Spec) []NamedTypeValue {
 	imports := []NamedTypeValue{}
 	for _, sp := range ds {
@@ -122,6 +124,7 @@ func (fp *FileParser) parseImports(ds []ast.Spec) []NamedTypeValue {
 	}
 	return imports
 }
+
 func (fp *FileParser) parseVars(ds []ast.Spec) []NamedTypeValue {
 	vars := []NamedTypeValue{}
 	for _, sp := range ds {
@@ -154,6 +157,7 @@ func (fp *FileParser) parseVars(ds []ast.Spec) []NamedTypeValue {
 	}
 	return vars
 }
+
 func (fp *FileParser) parseConstants(ds []ast.Spec) []NamedTypeValue {
 	constants := []NamedTypeValue{}
 	for _, sp := range ds {
@@ -178,6 +182,7 @@ func (fp *FileParser) parseConstants(ds []ast.Spec) []NamedTypeValue {
 	}
 	return constants
 }
+
 func (fp *FileParser) parseFieldListAsNamedTypes(list *ast.FieldList) []NamedTypeValue {
 	ntv := []NamedTypeValue{}
 	if list != nil {
@@ -209,6 +214,7 @@ func (fp *FileParser) parseFieldListAsNamedTypes(list *ast.FieldList) []NamedTyp
 	}
 	return ntv
 }
+
 func (fp *FileParser) getTypeFromExp(e ast.Expr) string {
 	tp := ""
 	switch k := e.(type) {
@@ -239,6 +245,7 @@ func (fp *FileParser) getTypeFromExp(e ast.Expr) string {
 	}
 	return tp
 }
+
 func (fp *FileParser) parseFieldListAsMethods(list *ast.FieldList) []Method {
 	mth := []Method{}
 	if list != nil {
